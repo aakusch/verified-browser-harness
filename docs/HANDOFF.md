@@ -15,6 +15,7 @@ Two Level 1 attempts were made against the visible challenge UI.
 |---|---|---|
 | One 25-task Luna batch | Submitted partial: 12 visible passes, 13 failures | One subscription request can sometimes return within the level window, but low reasoning was weak on complex tasks and no repair time remained. |
 | Split Luna/Terra lanes | Stopped without submitting: 10 visible passes, 15 unresolved | Simple Luna tasks passed. Four concurrent Terra calls did not produce complex answers before the initial cutoff. |
+| Six-lane Luna fan-out | Level ended partial: 6/25 solved, score 240; no submission | The run captured 25 cards and dispatched six subscription processes (8, 4, 4, 4, 4, 1 tasks). The page proves partial completion, but the failed run had no durable lane-result trace. |
 
 ## Offline subscription measurements
 
@@ -65,6 +66,11 @@ subscription allowance.
 - The adapter prefers explicit `[data-task-prompt]` nodes and no longer uses a
   full-card text fallback, which avoided leaking editor/check chrome into the
   compact model prompt.
+- `fanout-fast` now uses uniform 8-task Luna-low batches regardless of the
+  heuristic classification. This reduces the last live shape from six
+  subscription processes to four for a 25-card level. Each run now persists a
+  private per-lane event trace beside its capture, including starts, completed
+  solve counts, and failures.
 
 The recorded historical subscription timings above imply that the current
 60-second subscription strategy will be rejected until new, explicitly

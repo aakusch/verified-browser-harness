@@ -124,20 +124,15 @@ export function planSolverLanes(tasks, config) {
   const simple = tasks.filter((task) => taskLane(task) === "simple");
   const complex = tasks.filter((task) => taskLane(task) === "complex");
   if (config.browserStrategy === "fanout-fast") {
-    return [
-      ...partitionLane(simple, {
-        id: "simple",
-        batchSize: config.browserSimpleBatchSize,
-        model: config.fastModel,
-        reasoningEffort: config.fastReasoning,
-      }),
-      ...partitionLane(complex, {
-        id: "complex",
-        batchSize: config.browserComplexBatchSize,
-        model: config.fastModel,
-        reasoningEffort: config.fastReasoning,
-      }),
-    ];
+    // Every fanout-fast lane uses the same fast model. Keeping the heuristic's
+    // complex grouping here would only create extra subscription processes and
+    // increase the chance of server-side queueing.
+    return partitionLane(tasks, {
+      id: "fast",
+      batchSize: config.browserSimpleBatchSize,
+      model: config.fastModel,
+      reasoningEffort: config.fastReasoning,
+    });
   }
   return [
     ...partitionLane(simple, {
@@ -292,6 +287,26 @@ export async function runBrowserBridge({
     - config.bridgeReserveMs
     - repairReserveMs;
   const lanes = planSolverLanes(manifest.tasks, config);
+  const runTracePath = path.join(
+    config.cacheDir,
+    "browser-runs",
+    `${manifest.run.id.replace(/[^a-zA-Z0-9_.-]+/g, "-")}.run.json`,
+  );
+  const laneEvents = [];
+  let traceWrite = Promise.resolve();
+  const recordLaneEvent = async (name, details = {}) => {
+    laneEvents.push({ name, elapsedMs: Date.now() - startedAt, ...details });
+    traceWrite = traceWrite.then(() => writePrivateJson(runTracePath, {
+      schemaVersion: 1,
+      runId: manifest.run.id,
+      strategy: config.browserStrategy,
+      taskCount: manifest.tasks.length,
+      lanes: lanes.map((lane) => ({ id: lane.id, taskIds: lane.tasks.map((task) => task.id) })),
+      events: laneEvents,
+    }));
+    await traceWrite;
+  };
+  await recordLaneEvent("captured");
   const codes = new Map();
   const statusById = new Map();
   let applyQueue = Promise.resolve();
@@ -335,6 +350,7 @@ export async function runBrowserBridge({
         batchSize: lane.tasks.length,
         concurrency: 1,
       };
+      await recordLaneEvent("lane_started", { lane: lane.id, tasks: lane.tasks.length });
       log(`browser: solving ${lane.id} (${lane.tasks.length} task(s))`);
       const report = await solveManifest({
         manifest: laneManifest(manifest, lane, remainingForInitial),
@@ -350,6 +366,11 @@ export async function runBrowserBridge({
         tasks: lane.tasks.length,
         solveElapsedMs: report.run.elapsedMs,
       });
+      await recordLaneEvent("lane_solved", {
+        lane: lane.id,
+        solved: laneCodes.size,
+        solverElapsedMs: report.run.elapsedMs,
+      });
       applyQueue = applyQueue.then(() => applySolutions(lane, laneCodes, "checks"));
       await applyQueue;
     } catch (error) {
@@ -358,9 +379,11 @@ export async function runBrowserBridge({
       });
       laneFailures.push({ lane: lane.id, code: normalized.code, message: normalized.message });
       phase(timeline, "lane_failed", startedAt, { lane: lane.id, code: normalized.code });
+      await recordLaneEvent("lane_failed", { lane: lane.id, code: normalized.code });
       log(`browser: ${lane.id} did not complete: ${normalized.message}`);
     }
   });
+  await traceWrite;
 
   if (latencyObservationPath && laneFailures.length === 0) {
     await recordLatencyObservation(latencyObservationPath, {

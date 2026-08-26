@@ -155,8 +155,8 @@ generic `input` tasks into Luna and Terra lanes. Completed batches are filled an
 checked immediately. Set `CHEETCODE_BROWSER_STRATEGY=repair` to reserve a repair phase.
 
 For an explicitly accepted best-effort subscription attempt, `fanout-fast` partitions
-both simple and complex cards into independent Luna-low batches and starts them through
-the configured browser worker pool. It may still queue server-side under a subscription;
+all cards into uniform Luna-low batches and starts them through the configured browser
+worker pool. It may still queue server-side under a subscription;
 use it only with a deliberate latency-gate override:
 
 ```bash

@@ -180,22 +180,21 @@ test("one-shot scheduler partitions lanes for concurrent dispatch", () => {
   ]);
 });
 
-test("fanout-fast keeps complex batches on the fast subscription model", () => {
+test("fanout-fast uses uniform fast batches regardless of task classification", () => {
   const lanes = planSolverLanes([
     { id: "simple", functionName: "calculateTotal", prompt: "Add the values." },
     { id: "complex", functionName: "optimizeRoute", prompt: "Find the shortest graph route." },
   ], {
     browserStrategy: "fanout-fast",
-    browserSimpleBatchSize: 8,
+    browserSimpleBatchSize: 2,
     browserComplexBatchSize: 4,
     fastModel: "luna",
     fastReasoning: "low",
     strongModel: "terra",
     strongReasoning: "medium",
   });
-  assert.deepEqual(lanes.map((lane) => ({ id: lane.id, model: lane.model })), [
-    { id: "simple", model: "luna" },
-    { id: "complex", model: "luna" },
+  assert.deepEqual(lanes.map((lane) => ({ id: lane.id, model: lane.model, ids: lane.tasks.map((task) => task.id) })), [
+    { id: "fast", model: "luna", ids: ["simple", "complex"] },
   ]);
 });
 
