@@ -1,0 +1,29 @@
+{
+  "solutions": {
+    "problem-01": "function calculateScore(fieldGoals, threePointers, freeThrows) { return fieldGoals * 2 + threePointers * 3 + freeThrows; }",
+    "problem-02": "function calculateHoneyProduction(beehives) { return beehives * 25; }",
+    "problem-03": "function calculateMigrationDistance(trips) { return trips * 71000; }",
+    "problem-04": "function calculatePaintCost(red, blue, yellow) { return red * 12 + blue * 15 + yellow * 10; }",
+    "problem-05": "function countTreasure(gold, silver, copper) { return gold * 10000 + silver * 100 + copper; }",
+    "problem-06": "function drumForBeat(beat) { return beat % 2 === 1 ? 'kick' : 'snare'; }",
+    "problem-07": "function toFahrenheit(celsius) { return celsius * 9 / 5 + 32; }",
+    "problem-08": "function rectangleArea(width, height) { return width * height; }",
+    "problem-09": "function ticketTotal(adults, children) { return adults * 20 + children * 10; }",
+    "problem-10": "function waterConsumed(glasses) { return glasses * 250; }",
+    "problem-11": "function averageSpeed(distance, time) { return distance / time; }",
+    "problem-12": "function energyUsed(watts, hours) { return watts * hours; }",
+    "problem-13": "function partyPortions(guests) { return guests * 3; }",
+    "problem-14": "function pagesRead(pagesPerDay, days) { return pagesPerDay * days; }",
+    "problem-15": "function totalSavings(weekly, weeks) { return weekly * weeks; }",
+    "problem-16": "function animalLegs(chickens, cows) { return chickens * 2 + cows * 4; }",
+    "problem-17": "function fuelNeeded(distance, efficiency) { return distance / efficiency; }",
+    "problem-18": "function salePrice(price, discountPercent) { return price * (1 - discountPercent / 100); }",
+    "problem-19": "function numberAverage(numbers) { return numbers.reduce((sum, number) => sum + number, 0) / numbers.length; }",
+    "problem-20": "function movieMinutes(hours, minutes) { return hours * 60 + minutes; }",
+    "problem-21": "function gardenPerimeter(length, width) { return 2 * (length + width); }",
+    "problem-22": "function shippingCost(weight, rate, baseFee) { return baseFee + weight * rate; }",
+    "problem-23": "function evenOrOdd(number) { return number % 2 === 0 ? 'even' : 'odd'; }",
+    "problem-24": "function circumference(radius) { return 2 * Math.PI * radius; }",
+    "problem-25": "function timeInSeconds(hours, minutes, seconds) { return hours * 3600 + minutes * 60 + seconds; }"
+  }
+}

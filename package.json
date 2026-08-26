@@ -1,0 +1,21 @@
+{
+  "name": "cheetcode-v3-solver",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "scripts": {
+    "bridge": "node src/browser/cli.mjs",
+    "check": "node scripts/check.mjs",
+    "demo": "node scripts/serve-demo.mjs",
+    "index": "node src/cli.mjs index",
+    "materialize": "node src/cli.mjs materialize",
+    "preflight:browser": "node scripts/browser-preflight.mjs",
+    "preflight:model": "node scripts/model-preflight.mjs",
+    "preflight:subscription": "node scripts/subscription-preflight.mjs",
+    "solve": "node src/cli.mjs solve",
+    "test": "node --test"
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "run": {
+    "id": "fixture-javascript",
+    "deadlineMs": 60000
+  },
+  "tasks": [
+    {
+      "id": "fixture-sum",
+      "kind": "javascript",
+      "prompt": "Return the sum of every finite number in the input array. The empty array sums to zero.",
+      "functionName": "solve",
+      "starterCode": "function solve(numbers) {}",
+      "tests": [
+        { "args": [[1, 2, 3]], "expected": 6 },
+        { "args": [[]], "expected": 0 },
+        { "args": [[-2, 5, 1]], "expected": 4 }
+      ]
+    }
+  ]
+}

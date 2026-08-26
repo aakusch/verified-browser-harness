@@ -1,0 +1,12 @@
+---
+description: CheetCode browser-harness safety, evaluation, and handoff rules.
+alwaysApply: true
+---
+
+Read `AGENTS.md` and `docs/HANDOFF.md` before changing this project or running its browser bridge.
+
+- Do not start, check, or submit a live challenge without explicit current-turn user authorization.
+- Keep browser writes serialized; model workers must not directly operate the shared browser session.
+- Use the subscription-backed `codex` provider by default. Do not use paid model benchmarks unless explicitly requested.
+- Verify changes with `npm run check`, `npm test`, and `npm run preflight:browser`.
+- Use visible DOM controls only; do not inspect private endpoints or hidden page state.
