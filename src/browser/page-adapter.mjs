@@ -18,7 +18,7 @@ export async function pageBridgeOperation(request) {
     expandButtonText: request.profile?.expandButtonText || "Expand",
     startButtonText: request.profile?.startButtonText || "Skip and Start",
     levelStartPattern:
-      request.profile?.levelStartPattern || "^(?:Skip and Start|L\\d+\\s+.+\\s+\\d+s)$",
+      request.profile?.levelStartPattern || "^(?:Skip\\s*and\\s*Start|L\\d+.*\\d+s)$",
     passPattern: request.profile?.passPattern || "passed|correct|success|all tests pass",
     failPattern: request.profile?.failPattern || "failed|incorrect|error|test failure",
     pendingPattern: request.profile?.pendingPattern || "checking|running|pending",
