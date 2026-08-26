@@ -19,7 +19,7 @@ const DEFAULTS = Object.freeze({
   bridgeRepairReserveMs: 12_000,
   bridgeCheckTimeoutMs: 8_000,
   bridgePollMs: 100,
-  bridgeStartTimeoutMs: 2_000,
+  bridgeStartTimeoutMs: 4_000,
   bridgeStartPollMs: 25,
   bridgeVerificationTtlMs: 300_000,
   browserWorkerConcurrency: 2,
