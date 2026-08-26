@@ -14,7 +14,7 @@ test("loadConfig applies latency-oriented defaults", () => {
   assert.equal(config.browserWorkerConcurrency, 2);
   assert.equal(config.browserStrategy, "single-fast");
   assert.equal(config.browserLatencyMinimumSamples, 3);
-  assert.equal(config.bridgeStartTimeoutMs, 4_000);
+  assert.equal(config.bridgeStartTimeoutMs, 10_000);
   assert.equal(config.bridgeStartPollMs, 25);
   assert.equal(config.serviceTier, "auto");
   assert.equal(config.modelProvider, "codex");

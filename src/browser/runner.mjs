@@ -371,8 +371,12 @@ export async function runBrowserBridge({
         solved: laneCodes.size,
         solverElapsedMs: report.run.elapsedMs,
       });
-      applyQueue = applyQueue.then(() => applySolutions(lane, laneCodes, "checks"));
-      await applyQueue;
+      // Browser writes are deliberately serialized, but an earlier lane's
+      // failed check must not poison the queue and prevent later ready lanes
+      // from filling and checking their own answers.
+      const applyJob = applyQueue.then(() => applySolutions(lane, laneCodes, "checks"));
+      applyQueue = applyJob.catch(() => {});
+      await applyJob;
     } catch (error) {
       const normalized = error instanceof HarnessError ? error : new HarnessError(String(error), {
         code: "LANE_FAILED",

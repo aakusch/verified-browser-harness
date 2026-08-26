@@ -52,12 +52,6 @@ try {
     }),
     (error) => error.code === "BROWSER_LEVEL_NOT_STARTED",
   );
-  await browser.evaluateSource('document.querySelector("#start-level").click()');
-  const inspection = await inspectBrowser({ browser, allowedOrigin: server.origin });
-  assert.equal(inspection.cardCount, 25);
-  assert.equal(inspection.submitButtonCount, 1);
-  assert.deepEqual([...new Set(inspection.cards.map((card) => card.editorKind))], ["textarea"]);
-
   const fixture = JSON.parse(
     await readFile(path.join(projectRoot, "fixtures", "browser-solutions.json"), "utf8"),
   );
@@ -76,11 +70,16 @@ try {
     totalDeadlineMs: 60_000,
     runId: "local-browser-preflight",
     verificationStatePath,
+    autoStart: true,
   });
   assert.equal(result.complete, true);
   assert.equal(result.taskCount, 25);
   assert.equal(result.submitted, false);
   assert.ok(result.timerRemainingMs > 50_000);
+  const inspection = await inspectBrowser({ browser, allowedOrigin: server.origin });
+  assert.equal(inspection.cardCount, 25);
+  assert.equal(inspection.submitButtonCount, 1);
+  assert.deepEqual([...new Set(inspection.cards.map((card) => card.editorKind))], ["textarea"]);
   assert.equal(await browser.evaluateSource("window.__submitCount"), 0);
   const captured = JSON.parse(await readFile(path.join(temporary, "browser-runs", "local-browser-preflight.capture.json"), "utf8"));
   assert.equal(captured.capture.expandedCount, 25);

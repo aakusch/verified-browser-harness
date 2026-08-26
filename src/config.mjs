@@ -19,7 +19,10 @@ const DEFAULTS = Object.freeze({
   bridgeRepairReserveMs: 12_000,
   bridgeCheckTimeoutMs: 8_000,
   bridgePollMs: 100,
-  bridgeStartTimeoutMs: 4_000,
+  // The live page can take several seconds to replace the landing button with
+  // cards.  This is a wait-after-one-click window, not extra time spent
+  // clicking start controls.
+  bridgeStartTimeoutMs: 10_000,
   bridgeStartPollMs: 25,
   bridgeVerificationTtlMs: 300_000,
   browserWorkerConcurrency: 2,

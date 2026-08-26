@@ -16,6 +16,9 @@ export async function pageBridgeOperation(request) {
     checkButtonText: request.profile?.checkButtonText || "Run Check",
     submitButtonText: request.profile?.submitButtonText || "Finish & Submit",
     expandButtonText: request.profile?.expandButtonText || "Expand",
+    expandButtonPattern:
+      request.profile?.expandButtonPattern
+        || "^(?:expand(?:\\s+details)?|show\\s+(?:more|details)|view\\s+details|read\\s+more)$",
     startButtonText: request.profile?.startButtonText || "Skip and Start",
     levelStartPattern:
       request.profile?.levelStartPattern
@@ -189,18 +192,28 @@ export async function pageBridgeOperation(request) {
   }
 
   async function expandCards() {
-    const expandButtons = cardElements()
-      .flatMap((card) => [...card.querySelectorAll("button")])
-      .filter((button) => (
-        visible(button)
+    const pattern = new RegExp(profile.expandButtonPattern, "i");
+    const isExpandButton = (button) => {
+      const label = normalize(button.textContent);
+      return visible(button)
         && !button.disabled
-        && normalize(button.textContent).toLowerCase() === profile.expandButtonText.toLowerCase()
-      ));
-    for (const button of expandButtons) button.click();
-    if (expandButtons.length > 0) {
-      await new Promise((resolve) => setTimeout(resolve, request.expandWaitMs || 50));
+        && button.getAttribute("aria-expanded") !== "true"
+        && (label.toLowerCase() === profile.expandButtonText.toLowerCase() || pattern.test(label));
+    };
+    let expandedCount = 0;
+    // Page frameworks may replace a card's detail control after each click.
+    // Rescan until no closed controls remain so capture observes the complete
+    // visible prompt rather than a card preview.
+    for (let pass = 0; pass < 3; pass += 1) {
+      const expandButtons = cardElements()
+        .flatMap((card) => [...card.querySelectorAll("button")])
+        .filter(isExpandButton);
+      if (expandButtons.length === 0) break;
+      for (const button of expandButtons) button.click();
+      expandedCount += expandButtons.length;
+      await new Promise((resolve) => setTimeout(resolve, request.expandWaitMs || 150));
     }
-    return expandButtons.length;
+    return expandedCount;
   }
 
   function statusFor(card) {

@@ -21,6 +21,9 @@ function checkSolution(task, code) {
 function startLevel() {
   document.querySelector("#pre-start")?.remove();
   for (const task of manifest.tasks) {
+  const detailLabel = ["Expand", "Show details", "View details", "Read more"][
+    Number.parseInt(task.id.match(/(\d+)$/)?.[1] || "0", 10) % 4
+  ];
   const card = document.createElement("article");
   card.className = "task-card";
   card.innerHTML = `
@@ -29,7 +32,7 @@ function startLevel() {
       <span class="difficulty">easy</span>
     </div>
     <p class="prompt-preview">Open the task details to view the full specification.</p>
-    <button class="expand-task" type="button">Expand</button>
+    <button class="expand-task" type="button">${detailLabel}</button>
     <textarea data-code-editor spellcheck="false" aria-label="${task.title} code"></textarea>
     <div class="check-row">
       <span data-check-status data-status="idle" role="status">Not checked</span>
