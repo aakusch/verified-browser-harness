@@ -14,6 +14,8 @@ export async function pageBridgeOperation(request) {
       request.profile?.checkStatusSelector ||
       "[data-check-status], [role='status'], [aria-live], [class*='result'], [class*='status']",
     checkButtonText: request.profile?.checkButtonText || "Run Check",
+    passedButtonText: request.profile?.passedButtonText || "Passed",
+    retryButtonText: request.profile?.retryButtonText || "Retry",
     submitButtonText: request.profile?.submitButtonText || "Finish & Submit",
     expandButtonText: request.profile?.expandButtonText || "Expand",
     expandButtonPattern:
@@ -24,7 +26,7 @@ export async function pageBridgeOperation(request) {
       request.profile?.levelStartPattern
         || "^(?:Skip\\s*and\\s*Start|L\\d+.*\\d+s|Try\\s*level\\s*\\d+\\s*again)$",
     passPattern: request.profile?.passPattern || "passed|correct|success|all tests pass",
-    failPattern: request.profile?.failPattern || "failed|incorrect|error|test failure",
+    failPattern: request.profile?.failPattern || "failed|incorrect|error|test failure|retry",
     pendingPattern: request.profile?.pendingPattern || "checking|running|pending",
   };
 
@@ -36,6 +38,12 @@ export async function pageBridgeOperation(request) {
   };
   const buttonsMatching = (text) => [...document.querySelectorAll("button")]
     .filter((button) => visible(button) && normalize(button.textContent).toLowerCase() === text.toLowerCase());
+  const checkActionButton = (button) => {
+    const label = normalize(button.textContent).toLowerCase();
+    return label === profile.checkButtonText.toLowerCase()
+      || label === profile.passedButtonText.toLowerCase()
+      || label === profile.retryButtonText.toLowerCase();
+  };
   const startButtons = () => {
     const pattern = new RegExp(profile.levelStartPattern, "i");
     return [...document.querySelectorAll("button")]
@@ -48,9 +56,7 @@ export async function pageBridgeOperation(request) {
     let candidate = button.parentElement;
     while (candidate && candidate !== document.body) {
       const editors = candidate.querySelectorAll(profile.editorSelector);
-      const checks = [...candidate.querySelectorAll("button")].filter(
-        (item) => normalize(item.textContent).toLowerCase() === profile.checkButtonText.toLowerCase(),
-      );
+      const checks = [...candidate.querySelectorAll("button")].filter(checkActionButton);
       if (editors.length >= 1 && checks.length === 1) return candidate;
       candidate = candidate.parentElement;
     }
@@ -59,9 +65,13 @@ export async function pageBridgeOperation(request) {
 
   function cardElements() {
     const seen = new Set();
-    return buttonsMatching(profile.checkButtonText)
+    const explicitCards = [...document.querySelectorAll(profile.cardSelector)]
+      .filter((card) => visible(card) && card.querySelector(profile.editorSelector));
+    const inferredCards = [...document.querySelectorAll("button")]
+      .filter((button) => visible(button) && checkActionButton(button))
       .map(findCardForButton)
-      .filter((card) => {
+      .filter(Boolean);
+    return [...explicitCards, ...inferredCards].filter((card) => {
         if (!card || seen.has(card)) return false;
         seen.add(card);
         return true;
@@ -218,10 +228,14 @@ export async function pageBridgeOperation(request) {
 
   function statusFor(card) {
     const element = card.querySelector(profile.checkStatusSelector);
+    const action = [...card.querySelectorAll("button")].find(checkActionButton);
     const raw = normalize([
+      card.dataset?.status,
+      card.dataset?.checkState,
       element?.dataset?.status,
       element?.getAttribute?.("data-state"),
       element?.textContent,
+      action?.textContent,
     ].filter(Boolean).join(" "));
     if (!raw) return { state: "unknown", text: "" };
     if (new RegExp(profile.pendingPattern, "i").test(raw)) return { state: "pending", text: raw };
