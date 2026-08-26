@@ -141,6 +141,33 @@ test("browser scheduler reserves stronger lanes for complex or opaque tasks", ()
   );
 });
 
+test("one-shot scheduler partitions lanes for concurrent dispatch", () => {
+  const tasks = [
+    ...Array.from({ length: 5 }, (unused, index) => ({
+      id: `simple-${index}`, functionName: "calculateTotal", prompt: "Add the values.",
+    })),
+    ...Array.from({ length: 3 }, (unused, index) => ({
+      id: `complex-${index}`, functionName: "optimizeRoute", prompt: "Find the shortest graph route.",
+    })),
+  ];
+  const lanes = planSolverLanes(tasks, {
+    browserStrategy: "one-shot",
+    browserSimpleBatchSize: 2,
+    browserComplexBatchSize: 2,
+    fastModel: "fast",
+    fastReasoning: "low",
+    strongModel: "strong",
+    strongReasoning: "medium",
+  });
+  assert.deepEqual(lanes.map((lane) => ({ id: lane.id, tasks: lane.tasks.length })), [
+    { id: "simple-1", tasks: 2 },
+    { id: "simple-2", tasks: 2 },
+    { id: "simple-3", tasks: 1 },
+    { id: "complex-1", tasks: 2 },
+    { id: "complex-2", tasks: 1 },
+  ]);
+});
+
 test("single-fast strategy keeps the subscription path to one model turn", () => {
   const tasks = [
     { id: "simple", functionName: "calculateTotal", prompt: "Add the values." },

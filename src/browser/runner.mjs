@@ -98,6 +98,20 @@ export function taskLane(task) {
   return "simple";
 }
 
+function partitionLane(tasks, { id, batchSize, model, reasoningEffort }) {
+  const lanes = [];
+  for (let index = 0; index < tasks.length; index += batchSize) {
+    const number = Math.floor(index / batchSize) + 1;
+    lanes.push({
+      id: tasks.length <= batchSize ? id : `${id}-${number}`,
+      tasks: tasks.slice(index, index + batchSize),
+      model,
+      reasoningEffort,
+    });
+  }
+  return lanes;
+}
+
 export function planSolverLanes(tasks, config) {
   if (config.browserStrategy === "single-fast") {
     return [{
@@ -110,18 +124,18 @@ export function planSolverLanes(tasks, config) {
   const simple = tasks.filter((task) => taskLane(task) === "simple");
   const complex = tasks.filter((task) => taskLane(task) === "complex");
   return [
-    ...(simple.length ? [{
+    ...partitionLane(simple, {
       id: "simple",
-      tasks: simple,
+      batchSize: config.browserSimpleBatchSize,
       model: config.fastModel,
       reasoningEffort: config.fastReasoning,
-    }] : []),
-    ...(complex.length ? [{
+    }),
+    ...partitionLane(complex, {
       id: "complex",
-      tasks: complex,
+      batchSize: config.browserComplexBatchSize,
       model: config.strongModel,
       reasoningEffort: config.strongReasoning,
-    }] : []),
+    }),
   ];
 }
 
