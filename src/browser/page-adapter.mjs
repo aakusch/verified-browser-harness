@@ -257,6 +257,7 @@ export async function pageBridgeOperation(request) {
       cardCount: cards.length,
       submitButtonCount: buttonsMatching(profile.submitButtonText).length,
       startButtonCount: startButtons().length,
+      startButtons: startButtons().map((button) => normalize(button.textContent)),
       cards: cards.map(({ card, editor, id, index, title }) => ({
         id,
         index,

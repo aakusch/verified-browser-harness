@@ -192,6 +192,7 @@ export async function captureBrowser({
 async function startUntilCards({ browser, allowedOrigin, profile, config, timeline, startedAt, log }) {
   const deadlineAt = Date.now() + config.bridgeStartTimeoutMs;
   let starts = 0;
+  const clickedControls = new Set();
   while (Date.now() < deadlineAt) {
     const inspection = await inspectBrowser({ browser, allowedOrigin, profile });
     if (inspection.cardCount > 0) {
@@ -199,10 +200,20 @@ async function startUntilCards({ browser, allowedOrigin, profile, config, timeli
       return inspection;
     }
     if (inspection.startButtonCount !== 1) break;
-    const result = await browser.bridge("startLevel", { profile });
-    if (!result.clicked) break;
+    const label = inspection.startButtons?.[0];
+    if (!label || clickedControls.has(label)) {
+      await new Promise((resolve) => setTimeout(resolve, config.bridgeStartPollMs));
+      continue;
+    }
+    if (typeof browser.clickVisible === "function") {
+      await browser.clickVisible(label);
+    } else {
+      const result = await browser.bridge("startLevel", { profile });
+      if (!result.clicked) break;
+    }
+    clickedControls.add(label);
     starts += 1;
-    log(`browser: clicked visible start control (${result.text})`);
+    log(`browser: clicked visible start control (${label})`);
     await new Promise((resolve) => setTimeout(resolve, config.bridgeStartPollMs));
   }
   throw new HarnessError("Challenge cards did not appear after the authorized start sequence", {

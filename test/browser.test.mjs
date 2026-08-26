@@ -82,7 +82,9 @@ test("browser run starts visible level controls only with explicit authorization
     async assertOrigin() {},
     async bridge(operation) {
       if (operation === "inspect") {
-        return starts ? { cardCount: 1, startButtonCount: 0 } : { cardCount: 0, startButtonCount: 1 };
+        return starts
+          ? { cardCount: 1, startButtonCount: 0, startButtons: [] }
+          : { cardCount: 0, startButtonCount: 1, startButtons: ["L1Orchestrate60s"] };
       }
       assert.equal(operation, "startLevel");
       starts += 1;

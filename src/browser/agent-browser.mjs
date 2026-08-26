@@ -101,6 +101,10 @@ export class AgentBrowserSession {
     return this.evaluateSource("({href: location.href, origin: location.origin, title: document.title})");
   }
 
+  async clickVisible(control) {
+    return this.command(["click", control]);
+  }
+
   async assertOrigin(allowedOrigin) {
     const location = await this.location();
     if (location.origin !== allowedOrigin) {
