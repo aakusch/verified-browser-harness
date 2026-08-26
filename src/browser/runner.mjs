@@ -159,6 +159,28 @@ export async function captureBrowser({
   return browser.bridge("capture", { profile, deadlineMs, runId });
 }
 
+async function startUntilCards({ browser, allowedOrigin, profile, config, timeline, startedAt, log }) {
+  const deadlineAt = Date.now() + config.bridgeStartTimeoutMs;
+  let starts = 0;
+  while (Date.now() < deadlineAt) {
+    const inspection = await inspectBrowser({ browser, allowedOrigin, profile });
+    if (inspection.cardCount > 0) {
+      phase(timeline, "start", startedAt, { clicks: starts, tasks: inspection.cardCount });
+      return inspection;
+    }
+    if (inspection.startButtonCount !== 1) break;
+    const result = await browser.bridge("startLevel", { profile });
+    if (!result.clicked) break;
+    starts += 1;
+    log(`browser: clicked visible start control (${result.text})`);
+    await new Promise((resolve) => setTimeout(resolve, config.bridgeStartPollMs));
+  }
+  throw new HarnessError("Challenge cards did not appear after the authorized start sequence", {
+    code: "BROWSER_START_FAILED",
+    details: { clicks: starts },
+  });
+}
+
 export async function runBrowserBridge({
   browser,
   allowedOrigin,
@@ -170,6 +192,7 @@ export async function runBrowserBridge({
   runId,
   verificationStatePath,
   latencyObservationPath,
+  autoStart = false,
   log = () => {},
 }) {
   if (totalDeadlineMs <= config.bridgeReserveMs + 2_000) {
@@ -181,16 +204,23 @@ export async function runBrowserBridge({
   const timeline = [];
   const deadline = new Deadline(totalDeadlineMs);
 
-  const initialInspection = await inspectBrowser({ browser, allowedOrigin, profile });
+  let initialInspection = await inspectBrowser({ browser, allowedOrigin, profile });
   if (initialInspection.cardCount === 0) {
     if (initialInspection.startButtonCount === 1) {
+      if (autoStart) {
+        initialInspection = await startUntilCards({
+          browser, allowedOrigin, profile, config, timeline, startedAt, log,
+        });
+      } else {
       throw new HarnessError("Challenge level has not started; use the visible Skip and Start control first", {
         code: "BROWSER_LEVEL_NOT_STARTED",
       });
+      }
+    } else {
+      throw new HarnessError("No visible challenge cards are available", {
+        code: "BROWSER_NOT_READY",
+      });
     }
-    throw new HarnessError("No visible challenge cards are available", {
-      code: "BROWSER_NOT_READY",
-    });
   }
 
   const captured = await captureBrowser({

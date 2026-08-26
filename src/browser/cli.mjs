@@ -27,6 +27,7 @@ function usage() {
   npm run bridge -- run --session <name> --allow-origin <origin> [--deadline-ms 60000]
       [--provider <openai|codex>] [--mock-solutions <json>]
       [--verification-state <file>] [--profile <json>]
+      [--start-level START_LEVEL]
       [--submit-after-verify SUBMIT_VERIFIED_RUN]
   npm run bridge -- submit --session <name> --verification-state <file>
       --verification-token <token>
@@ -82,6 +83,16 @@ function validateAutoSubmit(value) {
   return true;
 }
 
+function validateAutoStart(value) {
+  if (value === undefined) return false;
+  if (value !== "START_LEVEL") {
+    throw new HarnessError("--start-level must equal START_LEVEL exactly", {
+      code: "INVALID_ARGUMENT",
+    });
+  }
+  return true;
+}
+
 async function readJson(filePath) {
   try {
     return JSON.parse(await readFile(path.resolve(filePath), "utf8"));
@@ -119,6 +130,7 @@ async function outputJson(value, outputPath = "-") {
 async function runCommand(options, config, browser) {
   const allowedOrigin = requireOption(options, "allow-origin");
   const autoSubmit = validateAutoSubmit(options["submit-after-verify"]);
+  const autoStart = validateAutoStart(options["start-level"]);
   const profile = await loadProfile(options);
   const totalDeadlineMs = parsePositiveInteger(
     options["deadline-ms"],
@@ -163,6 +175,7 @@ async function runCommand(options, config, browser) {
     latencyObservationPath: options["mock-solutions"]
       ? undefined
       : path.join(config.cacheDir, "latency-observations.json"),
+    autoStart,
     log: (message) => process.stderr.write(`${message}\n`),
   });
   if (autoSubmit) {
@@ -237,4 +250,4 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
   });
 }
 
-export { defaultVerificationPath, parseArguments, validateAutoSubmit };
+export { defaultVerificationPath, parseArguments, validateAutoStart, validateAutoSubmit };

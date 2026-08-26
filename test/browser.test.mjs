@@ -4,6 +4,7 @@ import { parseAgentBrowserJson } from "../src/browser/agent-browser.mjs";
 import {
   defaultVerificationPath,
   parseArguments,
+  validateAutoStart,
   validateAutoSubmit,
 } from "../src/browser/cli.mjs";
 import {
@@ -53,6 +54,51 @@ test("browser auto-submit requires the exact explicit confirmation", () => {
     () => validateAutoSubmit("yes"),
     (error) => error.code === "INVALID_ARGUMENT",
   );
+});
+
+test("browser auto-start requires the exact explicit confirmation", () => {
+  assert.equal(validateAutoStart(undefined), false);
+  assert.equal(validateAutoStart("START_LEVEL"), true);
+  assert.throws(
+    () => validateAutoStart("yes"),
+    (error) => error.code === "INVALID_ARGUMENT",
+  );
+});
+
+test("browser run starts visible level controls only with explicit authorization", async () => {
+  let starts = 0;
+  const browser = {
+    session: "start-test",
+    async assertOrigin() {},
+    async bridge(operation) {
+      if (operation === "inspect") {
+        return starts ? { cardCount: 1, startButtonCount: 0 } : { cardCount: 0, startButtonCount: 1 };
+      }
+      assert.equal(operation, "startLevel");
+      starts += 1;
+      return { clicked: true, text: "L1 Orchestrate 60s" };
+    },
+  };
+  await assert.rejects(
+    runBrowserBridge({
+      browser,
+      allowedOrigin: "https://ctf.firecrawl.dev",
+      config: { bridgeReserveMs: 12_000, bridgeStartTimeoutMs: 100, bridgeStartPollMs: 1 },
+      totalDeadlineMs: 60_000,
+    }),
+    (error) => error.code === "BROWSER_LEVEL_NOT_STARTED",
+  );
+  await assert.rejects(
+    runBrowserBridge({
+      browser,
+      allowedOrigin: "https://ctf.firecrawl.dev",
+      config: { bridgeReserveMs: 12_000, bridgeStartTimeoutMs: 100, bridgeStartPollMs: 1 },
+      totalDeadlineMs: 60_000,
+      autoStart: true,
+    }),
+    () => true,
+  );
+  assert.equal(starts, 1);
 });
 
 test("agent-browser JSON parser returns only the evaluated result", () => {

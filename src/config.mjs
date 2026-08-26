@@ -19,6 +19,8 @@ const DEFAULTS = Object.freeze({
   bridgeRepairReserveMs: 12_000,
   bridgeCheckTimeoutMs: 8_000,
   bridgePollMs: 100,
+  bridgeStartTimeoutMs: 2_000,
+  bridgeStartPollMs: 25,
   bridgeVerificationTtlMs: 300_000,
   browserWorkerConcurrency: 2,
   browserSimpleBatchSize: 12,
@@ -159,6 +161,16 @@ export function loadConfig(env = process.env, cwd = process.cwd()) {
       env.CHEETCODE_BRIDGE_POLL_MS,
       DEFAULTS.bridgePollMs,
       "CHEETCODE_BRIDGE_POLL_MS",
+    ),
+    bridgeStartTimeoutMs: positiveInteger(
+      env.CHEETCODE_BRIDGE_START_TIMEOUT_MS,
+      DEFAULTS.bridgeStartTimeoutMs,
+      "CHEETCODE_BRIDGE_START_TIMEOUT_MS",
+    ),
+    bridgeStartPollMs: positiveInteger(
+      env.CHEETCODE_BRIDGE_START_POLL_MS,
+      DEFAULTS.bridgeStartPollMs,
+      "CHEETCODE_BRIDGE_START_POLL_MS",
     ),
     bridgeVerificationTtlMs: positiveInteger(
       env.CHEETCODE_BRIDGE_VERIFICATION_TTL_MS,

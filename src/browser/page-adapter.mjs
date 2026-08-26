@@ -17,6 +17,8 @@ export async function pageBridgeOperation(request) {
     submitButtonText: request.profile?.submitButtonText || "Finish & Submit",
     expandButtonText: request.profile?.expandButtonText || "Expand",
     startButtonText: request.profile?.startButtonText || "Skip and Start",
+    levelStartPattern:
+      request.profile?.levelStartPattern || "^(?:Skip and Start|L\\d+\\s+.+\\s+\\d+s)$",
     passPattern: request.profile?.passPattern || "passed|correct|success|all tests pass",
     failPattern: request.profile?.failPattern || "failed|incorrect|error|test failure",
     pendingPattern: request.profile?.pendingPattern || "checking|running|pending",
@@ -30,6 +32,11 @@ export async function pageBridgeOperation(request) {
   };
   const buttonsMatching = (text) => [...document.querySelectorAll("button")]
     .filter((button) => visible(button) && normalize(button.textContent).toLowerCase() === text.toLowerCase());
+  const startButtons = () => {
+    const pattern = new RegExp(profile.levelStartPattern, "i");
+    return [...document.querySelectorAll("button")]
+      .filter((button) => visible(button) && pattern.test(normalize(button.textContent)));
+  };
 
   function findCardForButton(button) {
     const explicit = button.closest(profile.cardSelector);
@@ -225,9 +232,19 @@ export async function pageBridgeOperation(request) {
 
   const expandedCount = request.operation === "capture" ? await expandCards() : 0;
   const cards = describeCards();
+  if (request.operation === "startLevel") {
+    if (cards.length > 0) return { clicked: false, cardCount: cards.length };
+    const buttons = startButtons();
+    if (buttons.length !== 1) {
+      throw new Error(`Expected one visible level-start button, found ${buttons.length}`);
+    }
+    const text = normalize(buttons[0].textContent);
+    buttons[0].click();
+    return { clicked: true, text, cardCount: 0 };
+  }
   if (request.operation !== "inspect" && cards.length === 0) {
-    const startButtons = buttonsMatching(profile.startButtonText);
-    if (startButtons.length === 1) {
+    const starts = startButtons();
+    if (starts.length === 1) {
       throw new Error("Challenge level has not started; use the visible Skip and Start control first");
     }
     throw new Error("No challenge cards with visible Run Check buttons were found");
@@ -239,7 +256,7 @@ export async function pageBridgeOperation(request) {
       title: document.title,
       cardCount: cards.length,
       submitButtonCount: buttonsMatching(profile.submitButtonText).length,
-      startButtonCount: buttonsMatching(profile.startButtonText).length,
+      startButtonCount: startButtons().length,
       cards: cards.map(({ card, editor, id, index, title }) => ({
         id,
         index,
