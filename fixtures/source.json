@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "run": {
+    "id": "fixture-source",
+    "deadlineMs": 60000
+  },
+  "sourceRoots": [
+    { "name": "fixture", "path": "./source-repo" }
+  ],
+  "tasks": [
+    {
+      "id": "fixture-source-question",
+      "kind": "source",
+      "repository": "fixture",
+      "prompt": "Which exported function adds every number in an array?",
+      "choices": ["sum", "product", "average"]
+    }
+  ]
+}

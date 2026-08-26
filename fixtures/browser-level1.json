@@ -1,0 +1,231 @@
+{
+  "schemaVersion": 1,
+  "run": { "id": "browser-level1-preflight", "deadlineMs": 60000 },
+  "tasks": [
+    {
+      "id": "problem-01",
+      "kind": "javascript",
+      "title": "[01] Basketball Game Score",
+      "prompt": "Regular field goals are worth 2 points, three-pointers are worth 3 points, and free throws are worth 1 point. Calculate the total score.",
+      "functionName": "calculateScore",
+      "starterCode": "function calculateScore(fieldGoals, threePointers, freeThrows) {\n\n}",
+      "tests": [{ "args": [10, 5, 7], "expected": 42 }, { "args": [0, 0, 0], "expected": 0 }]
+    },
+    {
+      "id": "problem-02",
+      "kind": "javascript",
+      "title": "[02] Beehive Honey Production",
+      "prompt": "Each beehive produces 25 kg of honey per season. Calculate total honey production for a number of beehives.",
+      "functionName": "calculateHoneyProduction",
+      "starterCode": "function calculateHoneyProduction(beehives) {\n\n}",
+      "tests": [{ "args": [4], "expected": 100 }, { "args": [0], "expected": 0 }]
+    },
+    {
+      "id": "problem-03",
+      "kind": "javascript",
+      "title": "[03] Bird Migration Distance",
+      "prompt": "An Arctic tern covers 71000 km per full round-trip migration. Calculate distance after a number of full migrations.",
+      "functionName": "calculateMigrationDistance",
+      "starterCode": "function calculateMigrationDistance(trips) {\n\n}",
+      "tests": [{ "args": [2], "expected": 142000 }, { "args": [0], "expected": 0 }]
+    },
+    {
+      "id": "problem-04",
+      "kind": "javascript",
+      "title": "[04] Paint Color Mixer",
+      "prompt": "Red paint costs $12 per liter, blue $15, and yellow $10. Calculate total cost for the requested liters.",
+      "functionName": "calculatePaintCost",
+      "starterCode": "function calculatePaintCost(red, blue, yellow) {\n\n}",
+      "tests": [{ "args": [2, 1, 3], "expected": 69 }, { "args": [0, 0, 0], "expected": 0 }]
+    },
+    {
+      "id": "problem-05",
+      "kind": "javascript",
+      "title": "[05] Dragon's Treasure Counter",
+      "prompt": "One gold coin is 100 silver coins and one silver coin is 100 copper coins. Return total value in copper coins.",
+      "functionName": "countTreasure",
+      "starterCode": "function countTreasure(gold, silver, copper) {\n\n}",
+      "tests": [{ "args": [2, 3, 4], "expected": 20304 }, { "args": [0, 0, 9], "expected": 9 }]
+    },
+    {
+      "id": "problem-06",
+      "kind": "javascript",
+      "title": "[06] Drum Beat Pattern Generator",
+      "prompt": "In 4/4 time a kick plays on beats 1 and 3 and a snare on beats 2 and 4. Return kick or snare for a beat from 1 through 4.",
+      "functionName": "drumForBeat",
+      "starterCode": "function drumForBeat(beat) {\n\n}",
+      "tests": [{ "args": [1], "expected": "kick" }, { "args": [4], "expected": "snare" }]
+    },
+    {
+      "id": "problem-07",
+      "kind": "javascript",
+      "title": "[07] Temperature Converter",
+      "prompt": "Convert a Celsius temperature to Fahrenheit using F = C × 9/5 + 32.",
+      "functionName": "toFahrenheit",
+      "starterCode": "function toFahrenheit(celsius) {\n\n}",
+      "tests": [{ "args": [0], "expected": 32 }, { "args": [100], "expected": 212 }]
+    },
+    {
+      "id": "problem-08",
+      "kind": "javascript",
+      "title": "[08] Rectangle Area",
+      "prompt": "Calculate the area of a rectangle from its width and height.",
+      "functionName": "rectangleArea",
+      "starterCode": "function rectangleArea(width, height) {\n\n}",
+      "tests": [{ "args": [7, 8], "expected": 56 }, { "args": [0, 5], "expected": 0 }]
+    },
+    {
+      "id": "problem-09",
+      "kind": "javascript",
+      "title": "[09] Museum Ticket Total",
+      "prompt": "Adult tickets cost $20 and child tickets cost $10. Calculate the total price.",
+      "functionName": "ticketTotal",
+      "starterCode": "function ticketTotal(adults, children) {\n\n}",
+      "tests": [{ "args": [3, 2], "expected": 80 }, { "args": [0, 4], "expected": 40 }]
+    },
+    {
+      "id": "problem-10",
+      "kind": "javascript",
+      "title": "[10] Water Tracker",
+      "prompt": "Each glass contains 250 milliliters. Return total milliliters for the number of glasses.",
+      "functionName": "waterConsumed",
+      "starterCode": "function waterConsumed(glasses) {\n\n}",
+      "tests": [{ "args": [8], "expected": 2000 }, { "args": [0], "expected": 0 }]
+    },
+    {
+      "id": "problem-11",
+      "kind": "javascript",
+      "title": "[11] Running Pace",
+      "prompt": "Return average speed by dividing distance by time.",
+      "functionName": "averageSpeed",
+      "starterCode": "function averageSpeed(distance, time) {\n\n}",
+      "tests": [{ "args": [15, 3], "expected": 5 }, { "args": [42, 6], "expected": 7 }]
+    },
+    {
+      "id": "problem-12",
+      "kind": "javascript",
+      "title": "[12] Energy Usage",
+      "prompt": "Calculate watt-hours by multiplying watts by hours.",
+      "functionName": "energyUsed",
+      "starterCode": "function energyUsed(watts, hours) {\n\n}",
+      "tests": [{ "args": [60, 5], "expected": 300 }, { "args": [0, 10], "expected": 0 }]
+    },
+    {
+      "id": "problem-13",
+      "kind": "javascript",
+      "title": "[13] Party Portions",
+      "prompt": "Each guest receives 3 portions. Return the total portions needed.",
+      "functionName": "partyPortions",
+      "starterCode": "function partyPortions(guests) {\n\n}",
+      "tests": [{ "args": [12], "expected": 36 }, { "args": [1], "expected": 3 }]
+    },
+    {
+      "id": "problem-14",
+      "kind": "javascript",
+      "title": "[14] Reading Progress",
+      "prompt": "Return pages read by multiplying pages per day by days.",
+      "functionName": "pagesRead",
+      "starterCode": "function pagesRead(pagesPerDay, days) {\n\n}",
+      "tests": [{ "args": [25, 7], "expected": 175 }, { "args": [0, 5], "expected": 0 }]
+    },
+    {
+      "id": "problem-15",
+      "kind": "javascript",
+      "title": "[15] Weekly Savings",
+      "prompt": "Return total savings by multiplying weekly savings by the number of weeks.",
+      "functionName": "totalSavings",
+      "starterCode": "function totalSavings(weekly, weeks) {\n\n}",
+      "tests": [{ "args": [40, 12], "expected": 480 }, { "args": [5, 0], "expected": 0 }]
+    },
+    {
+      "id": "problem-16",
+      "kind": "javascript",
+      "title": "[16] Farm Animal Legs",
+      "prompt": "Chickens have 2 legs and cows have 4. Return the total number of legs.",
+      "functionName": "animalLegs",
+      "starterCode": "function animalLegs(chickens, cows) {\n\n}",
+      "tests": [{ "args": [5, 3], "expected": 22 }, { "args": [0, 2], "expected": 8 }]
+    },
+    {
+      "id": "problem-17",
+      "kind": "javascript",
+      "title": "[17] Fuel Needed",
+      "prompt": "Return required fuel by dividing distance by fuel efficiency.",
+      "functionName": "fuelNeeded",
+      "starterCode": "function fuelNeeded(distance, efficiency) {\n\n}",
+      "tests": [{ "args": [600, 12], "expected": 50 }, { "args": [100, 20], "expected": 5 }]
+    },
+    {
+      "id": "problem-18",
+      "kind": "javascript",
+      "title": "[18] Sale Price",
+      "prompt": "Apply a percentage discount to a price and return the resulting sale price.",
+      "functionName": "salePrice",
+      "starterCode": "function salePrice(price, discountPercent) {\n\n}",
+      "tests": [{ "args": [100, 25], "expected": 75 }, { "args": [80, 0], "expected": 80 }]
+    },
+    {
+      "id": "problem-19",
+      "kind": "javascript",
+      "title": "[19] Number Average",
+      "prompt": "Return the arithmetic mean of a non-empty array of numbers.",
+      "functionName": "numberAverage",
+      "starterCode": "function numberAverage(numbers) {\n\n}",
+      "tests": [{ "args": [[2, 4, 6]], "expected": 4 }, { "args": [[9]], "expected": 9 }]
+    },
+    {
+      "id": "problem-20",
+      "kind": "javascript",
+      "title": "[20] Movie Duration",
+      "prompt": "Convert a duration in hours and minutes into total minutes.",
+      "functionName": "movieMinutes",
+      "starterCode": "function movieMinutes(hours, minutes) {\n\n}",
+      "tests": [{ "args": [2, 15], "expected": 135 }, { "args": [0, 45], "expected": 45 }]
+    },
+    {
+      "id": "problem-21",
+      "kind": "javascript",
+      "title": "[21] Garden Perimeter",
+      "prompt": "Return the perimeter of a rectangular garden from its length and width.",
+      "functionName": "gardenPerimeter",
+      "starterCode": "function gardenPerimeter(length, width) {\n\n}",
+      "tests": [{ "args": [10, 6], "expected": 32 }, { "args": [1, 1], "expected": 4 }]
+    },
+    {
+      "id": "problem-22",
+      "kind": "javascript",
+      "title": "[22] Shipping Cost",
+      "prompt": "Shipping costs a base fee plus weight multiplied by the per-unit rate.",
+      "functionName": "shippingCost",
+      "starterCode": "function shippingCost(weight, rate, baseFee) {\n\n}",
+      "tests": [{ "args": [5, 3, 4], "expected": 19 }, { "args": [0, 3, 4], "expected": 4 }]
+    },
+    {
+      "id": "problem-23",
+      "kind": "javascript",
+      "title": "[23] Even or Odd",
+      "prompt": "Return even when the integer is even and odd otherwise.",
+      "functionName": "evenOrOdd",
+      "starterCode": "function evenOrOdd(number) {\n\n}",
+      "tests": [{ "args": [12], "expected": "even" }, { "args": [7], "expected": "odd" }]
+    },
+    {
+      "id": "problem-24",
+      "kind": "javascript",
+      "title": "[24] Circle Circumference",
+      "prompt": "Return a circle's circumference using 2 × Math.PI × radius.",
+      "functionName": "circumference",
+      "starterCode": "function circumference(radius) {\n\n}",
+      "tests": [{ "args": [2], "expected": 12.566370614359172 }, { "args": [0], "expected": 0 }]
+    },
+    {
+      "id": "problem-25",
+      "kind": "javascript",
+      "title": "[25] Time in Seconds",
+      "prompt": "Convert hours, minutes, and seconds into total seconds.",
+      "functionName": "timeInSeconds",
+      "starterCode": "function timeInSeconds(hours, minutes, seconds) {\n\n}",
+      "tests": [{ "args": [1, 2, 3], "expected": 3723 }, { "args": [0, 0, 45], "expected": 45 }]
+    }
+  ]
+}

@@ -1,0 +1,119 @@
+:root {
+  color: #171717;
+  background: #f6f6f5;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+
+* { box-sizing: border-box; }
+
+body { margin: 0; }
+
+header {
+  align-items: center;
+  background: #fff;
+  border-top: 4px solid #ef4f18;
+  display: flex;
+  gap: 20px;
+  height: 72px;
+  padding: 0 18px;
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+
+header strong { font: 700 20px system-ui, sans-serif; }
+header .handle { color: #aaa; }
+header .level {
+  background: #fff1eb;
+  color: #c9481e;
+  font-weight: 700;
+  padding: 6px 12px;
+}
+header time { margin-left: auto; }
+
+button {
+  background: #ff5b17;
+  border: 0;
+  border-radius: 9px;
+  color: #fff;
+  cursor: pointer;
+  font: 700 14px system-ui, sans-serif;
+  min-height: 38px;
+}
+
+#finish { min-width: 180px; padding: 0 20px; }
+
+#challenge {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  padding: 12px;
+}
+
+.task-card {
+  background: #fff;
+  border: 1px solid #e8e8e6;
+  border-radius: 14px;
+  display: grid;
+  grid-template-rows: auto auto 1fr auto;
+  min-height: 430px;
+  padding: 14px;
+}
+
+.task-heading { align-items: center; display: flex; gap: 12px; }
+.task-heading h2 {
+  font: 700 16px system-ui, sans-serif;
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.difficulty {
+  color: #278848;
+  font-size: 12px;
+  font-weight: 700;
+  margin-left: auto;
+}
+
+.task-card p {
+  color: #5b5b5b;
+  font: 14px/1.45 system-ui, sans-serif;
+  min-height: 62px;
+}
+
+textarea {
+  border: 1px solid #e4e4e4;
+  border-radius: 7px;
+  font: 14px/1.55 ui-monospace, monospace;
+  min-height: 250px;
+  padding: 14px;
+  resize: vertical;
+  width: 100%;
+}
+
+.check-row {
+  align-items: center;
+  display: grid;
+  gap: 8px;
+  grid-template-columns: minmax(0, 1fr) 160px;
+  margin-top: 12px;
+}
+.check-row [data-status="passed"] { color: #278848; }
+.check-row [data-status="failed"] { color: #b42318; }
+.check-row [data-status="pending"] { color: #a15c00; }
+
+@media (max-width: 900px) {
+  #challenge { grid-template-columns: 1fr; }
+}
+
+.gate {
+  background: #fff;
+  border: 1px solid #d8dbe0;
+  border-radius: 10px;
+  grid-column: 1 / -1;
+  padding: 24px;
+}
+.gate fieldset { border: 1px solid #d8dbe0; margin: 0 0 12px; }
+.gate label { display: block; margin: 6px 0; }
+.task-card details { margin-top: 8px; }
+.task-card summary { cursor: pointer; }

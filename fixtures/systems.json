@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "run": {
+    "id": "fixture-systems",
+    "deadlineMs": 120000
+  },
+  "tasks": [
+    {
+      "id": "fixture-systems-task",
+      "kind": "systems",
+      "language": "rust",
+      "prompt": "Complete the library while preserving its public API.",
+      "starterFiles": {
+        "src/lib.rs": "pub fn answer() -> u32 { 42 }\n"
+      },
+      "checks": ["library compiles", "answer returns 42"]
+    }
+  ]
+}
