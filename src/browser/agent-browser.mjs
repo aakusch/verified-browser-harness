@@ -69,6 +69,10 @@ function parseAgentBrowserJson(output) {
   return parsed.data?.result;
 }
 
+function escapeRegExp(value) {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
 export class AgentBrowserSession {
   constructor({ session, executable = "agent-browser", timeoutMs = 25_000 }) {
     if (!session) {
@@ -102,7 +106,15 @@ export class AgentBrowserSession {
   }
 
   async clickVisible(control) {
-    return this.command(["click", control]);
+    const snapshot = await this.command(["snapshot"]);
+    const pattern = new RegExp(`button "${escapeRegExp(control)}" \\[ref=([^\\]]+)\\]`);
+    const match = snapshot.match(pattern);
+    if (!match) {
+      throw new HarnessError(`Could not find visible button reference for ${control}`, {
+        code: "BROWSER_NOT_READY",
+      });
+    }
+    return this.command(["click", match[1]]);
   }
 
   async assertOrigin(allowedOrigin) {
