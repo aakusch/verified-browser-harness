@@ -123,6 +123,22 @@ export function planSolverLanes(tasks, config) {
   }
   const simple = tasks.filter((task) => taskLane(task) === "simple");
   const complex = tasks.filter((task) => taskLane(task) === "complex");
+  if (config.browserStrategy === "fanout-fast") {
+    return [
+      ...partitionLane(simple, {
+        id: "simple",
+        batchSize: config.browserSimpleBatchSize,
+        model: config.fastModel,
+        reasoningEffort: config.fastReasoning,
+      }),
+      ...partitionLane(complex, {
+        id: "complex",
+        batchSize: config.browserComplexBatchSize,
+        model: config.fastModel,
+        reasoningEffort: config.fastReasoning,
+      }),
+    ];
+  }
   return [
     ...partitionLane(simple, {
       id: "simple",

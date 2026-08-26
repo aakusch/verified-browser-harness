@@ -28,6 +28,7 @@ function usage() {
       [--provider <openai|codex>] [--mock-solutions <json>]
       [--verification-state <file>] [--profile <json>]
       [--start-level START_LEVEL]
+      [--override-latency-gate OVERRIDE_LATENCY_GATE]
       [--submit-after-verify SUBMIT_VERIFIED_RUN]
   npm run bridge -- submit --session <name> --verification-state <file>
       --verification-token <token>
@@ -93,6 +94,16 @@ function validateAutoStart(value) {
   return true;
 }
 
+function validateLatencyOverride(value) {
+  if (value === undefined) return false;
+  if (value !== "OVERRIDE_LATENCY_GATE") {
+    throw new HarnessError("--override-latency-gate must equal OVERRIDE_LATENCY_GATE exactly", {
+      code: "INVALID_ARGUMENT",
+    });
+  }
+  return true;
+}
+
 async function readJson(filePath) {
   try {
     return JSON.parse(await readFile(path.resolve(filePath), "utf8"));
@@ -131,6 +142,7 @@ async function runCommand(options, config, browser) {
   const allowedOrigin = requireOption(options, "allow-origin");
   const autoSubmit = validateAutoSubmit(options["submit-after-verify"]);
   const autoStart = validateAutoStart(options["start-level"]);
+  const latencyGateOverridden = validateLatencyOverride(options["override-latency-gate"]);
   const profile = await loadProfile(options);
   const totalDeadlineMs = parsePositiveInteger(
     options["deadline-ms"],
@@ -154,12 +166,16 @@ async function runCommand(options, config, browser) {
     cache = new SolverCache(config.cacheDir);
     const availableMs = totalDeadlineMs - runConfig.bridgeReserveMs
       - (runConfig.browserStrategy === "repair" ? runConfig.bridgeRepairReserveMs : 0);
-    await assertStrategyLatency({
-      filePath: path.join(config.cacheDir, "latency-observations.json"),
-      key: browserLatencyKey(runConfig),
-      availableMs,
-      minimumSamples: runConfig.browserLatencyMinimumSamples,
-    });
+    if (latencyGateOverridden) {
+      process.stderr.write("warning: proceeding despite the recorded latency safety gate\n");
+    } else {
+      await assertStrategyLatency({
+        filePath: path.join(config.cacheDir, "latency-observations.json"),
+        key: browserLatencyKey(runConfig),
+        availableMs,
+        minimumSamples: runConfig.browserLatencyMinimumSamples,
+      });
+    }
   }
 
   let result = await runBrowserBridge({
@@ -192,6 +208,7 @@ async function runCommand(options, config, browser) {
       submitResult: submitted,
     };
   }
+  if (latencyGateOverridden) result = { ...result, latencyGateOverridden: true };
   await outputJson(result, options.out || "-");
 }
 
@@ -250,4 +267,10 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
   });
 }
 
-export { defaultVerificationPath, parseArguments, validateAutoStart, validateAutoSubmit };
+export {
+  defaultVerificationPath,
+  parseArguments,
+  validateAutoStart,
+  validateAutoSubmit,
+  validateLatencyOverride,
+};

@@ -72,7 +72,7 @@ function modelProvider(value) {
 
 function browserStrategy(value) {
   const resolved = value || DEFAULTS.browserStrategy;
-  if (!["single-fast", "one-shot", "repair"].includes(resolved)) {
+  if (!["single-fast", "one-shot", "fanout-fast", "repair"].includes(resolved)) {
     throw new HarnessError("CHEETCODE_BROWSER_STRATEGY is not supported", {
       code: "INVALID_CONFIG",
     });

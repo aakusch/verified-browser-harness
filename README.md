@@ -154,6 +154,19 @@ strategy separates direct tasks from graph, parsing, optimization, validation, a
 generic `input` tasks into Luna and Terra lanes. Completed batches are filled and
 checked immediately. Set `CHEETCODE_BROWSER_STRATEGY=repair` to reserve a repair phase.
 
+For an explicitly accepted best-effort subscription attempt, `fanout-fast` partitions
+both simple and complex cards into independent Luna-low batches and starts them through
+the configured browser worker pool. It may still queue server-side under a subscription;
+use it only with a deliberate latency-gate override:
+
+```bash
+CHEETCODE_BROWSER_STRATEGY=fanout-fast \
+CHEETCODE_BROWSER_WORKER_CONCURRENCY=8 \
+CHEETCODE_BROWSER_SIMPLE_BATCH_SIZE=8 \
+npm run bridge -- run --session cheetcode --allow-origin https://ctf.firecrawl.dev \
+  --start-level START_LEVEL --override-latency-gate OVERRIDE_LATENCY_GATE
+```
+
 ## Manifest workflow
 
 Create one manifest for the active level. The harness supports three task kinds and

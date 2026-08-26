@@ -6,6 +6,7 @@ import {
   parseArguments,
   validateAutoStart,
   validateAutoSubmit,
+  validateLatencyOverride,
 } from "../src/browser/cli.mjs";
 import {
   codeHash,
@@ -61,6 +62,15 @@ test("browser auto-start requires the exact explicit confirmation", () => {
   assert.equal(validateAutoStart("START_LEVEL"), true);
   assert.throws(
     () => validateAutoStart("yes"),
+    (error) => error.code === "INVALID_ARGUMENT",
+  );
+});
+
+test("browser latency override requires the exact explicit confirmation", () => {
+  assert.equal(validateLatencyOverride(undefined), false);
+  assert.equal(validateLatencyOverride("OVERRIDE_LATENCY_GATE"), true);
+  assert.throws(
+    () => validateLatencyOverride("yes"),
     (error) => error.code === "INVALID_ARGUMENT",
   );
 });
@@ -165,6 +175,25 @@ test("one-shot scheduler partitions lanes for concurrent dispatch", () => {
     { id: "simple-3", tasks: 1 },
     { id: "complex-1", tasks: 2 },
     { id: "complex-2", tasks: 1 },
+  ]);
+});
+
+test("fanout-fast keeps complex batches on the fast subscription model", () => {
+  const lanes = planSolverLanes([
+    { id: "simple", functionName: "calculateTotal", prompt: "Add the values." },
+    { id: "complex", functionName: "optimizeRoute", prompt: "Find the shortest graph route." },
+  ], {
+    browserStrategy: "fanout-fast",
+    browserSimpleBatchSize: 8,
+    browserComplexBatchSize: 4,
+    fastModel: "luna",
+    fastReasoning: "low",
+    strongModel: "terra",
+    strongReasoning: "medium",
+  });
+  assert.deepEqual(lanes.map((lane) => ({ id: lane.id, model: lane.model })), [
+    { id: "simple", model: "luna" },
+    { id: "complex", model: "luna" },
   ]);
 });
 
