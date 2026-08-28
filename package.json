@@ -1,5 +1,5 @@
 {
-  "name": "cheetcode-v3-solver",
+  "name": "verified-browser-harness",
   "version": "0.1.0",
   "private": true,
   "type": "module",
@@ -18,5 +18,7 @@
     "review": "node scripts/review-questions.mjs",
     "solve": "node src/cli.mjs solve",
     "test": "node --test"
-  }
+  },
+  "license": "MIT",
+  "description": "Drives model-generated work into a live web page and refuses to submit until every visible check passes."
 }

@@ -17,8 +17,8 @@ import { SolverCache } from "../src/runtime/cache.mjs";
 import { startDemoServer } from "./serve-demo.mjs";
 
 const projectRoot = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
-const session = `cheetcode-preflight-${process.pid}`;
-const temporary = await mkdtemp(path.join(os.tmpdir(), "cheetcode-browser-preflight-"));
+const session = `harness-preflight-${process.pid}`;
+const temporary = await mkdtemp(path.join(os.tmpdir(), "harness-browser-preflight-"));
 const server = await startDemoServer();
 const browser = new AgentBrowserSession({ session });
 
@@ -151,8 +151,8 @@ try {
     await readFile(path.join(projectRoot, "fixtures", "browser-solutions.json"), "utf8"),
   );
   const config = loadConfig({
-    CHEETCODE_CACHE_DIR: temporary,
-    CHEETCODE_BRIDGE_POLL_MS: "20",
+    VBH_CACHE_DIR: temporary,
+    VBH_BRIDGE_POLL_MS: "20",
   }, projectRoot);
 
   // 4. Clean run: verified, not submitted.

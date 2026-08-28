@@ -15,7 +15,7 @@ test("parseArguments separates flags and positional values", () => {
 });
 
 test("resolveContainedPath rejects generated path traversal", () => {
-  const root = path.resolve("/tmp/cheetcode-output");
+  const root = path.resolve("/tmp/harness-output");
   assert.equal(resolveContainedPath(root, "src/lib.rs"), path.join(root, "src/lib.rs"));
   assert.throws(() => resolveContainedPath(root, "../../outside"), /escapes output/);
   assert.throws(() => resolveContainedPath(root, "/tmp/outside"), /Unsafe generated path/);

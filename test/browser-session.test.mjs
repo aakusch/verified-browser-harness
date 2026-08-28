@@ -11,7 +11,7 @@ const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 test("agent-browser eval uses the CLI's documented session/stdin/json flags", async () => {
   const seen = [];
   const session = new AgentBrowserSession({
-    session: "cheetcode",
+    session: "harness",
     runImpl: async (executable, args, options) => {
       seen.push({ executable, args, options });
       return jsonResult({ ok: true });
@@ -19,7 +19,7 @@ test("agent-browser eval uses the CLI's documented session/stdin/json flags", as
   });
   assert.deepEqual(await session.bridge("inspect", { profile: {} }), { ok: true });
   assert.equal(seen[0].executable, "agent-browser");
-  assert.deepEqual(seen[0].args, ["--session", "cheetcode", "eval", "--stdin", "--json"]);
+  assert.deepEqual(seen[0].args, ["--session", "harness", "eval", "--stdin", "--json"]);
   assert.match(seen[0].options.input, /^\(async function pageBridgeOperation/);
   assert.match(seen[0].options.input, /"operation":"inspect"/);
 });
@@ -27,7 +27,7 @@ test("agent-browser eval uses the CLI's documented session/stdin/json flags", as
 test("browser commands run one at a time in call order", async () => {
   const events = [];
   const session = new AgentBrowserSession({
-    session: "cheetcode",
+    session: "harness",
     runImpl: async (executable, args, options) => {
       const label = options.input || args.join(" ");
       events.push(`start:${label}`);
@@ -59,7 +59,7 @@ test("browser commands run one at a time in call order", async () => {
 test("one failed browser operation does not wedge the queue", async () => {
   let call = 0;
   const session = new AgentBrowserSession({
-    session: "cheetcode",
+    session: "harness",
     runImpl: async () => {
       call += 1;
       if (call === 1) throw new Error("transient agent-browser failure");

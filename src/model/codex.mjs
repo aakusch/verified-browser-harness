@@ -137,7 +137,7 @@ export class CodexExecModelClient {
     signal,
   }) {
     const effectiveTimeoutMs = Math.max(1, Math.min(timeoutMs, this.requestTimeoutMs));
-    const directory = await mkdtemp(path.join(this.temporaryRoot, "cheetcode-codex-"));
+    const directory = await mkdtemp(path.join(this.temporaryRoot, "harness-codex-"));
     const schemaPath = path.join(directory, "schema.json");
     const outputPath = path.join(directory, "output.json");
     try {

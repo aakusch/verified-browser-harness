@@ -31,7 +31,7 @@ export class OpenAIModelClient {
   constructor({
     apiKey,
     baseUrl = "https://api.openai.com/v1",
-    safetyIdentifier = "cheetcode-v3-local-harness",
+    safetyIdentifier = "harness-v3-local-harness",
     serviceTier = "auto",
     requestTimeoutMs = 45_000,
     maxOutputTokens = 12_000,

@@ -50,16 +50,16 @@ function manifestWith(taskCount, deadlineMs) {
 }
 
 async function context(t, env = {}) {
-  const temporary = await mkdtemp(path.join(os.tmpdir(), "cheetcode-resilience-"));
+  const temporary = await mkdtemp(path.join(os.tmpdir(), "harness-resilience-"));
   t.after(() => rm(temporary, { recursive: true, force: true }));
   return {
-    config: loadConfig({ CHEETCODE_CACHE_DIR: temporary, ...env }, root),
+    config: loadConfig({ VBH_CACHE_DIR: temporary, ...env }, root),
     cache: new SolverCache(path.join(temporary, "solutions")),
   };
 }
 
 test("a deadline cancels an in-flight model call and the run still returns", async (t) => {
-  const { config, cache } = await context(t, { CHEETCODE_RESERVE_MS: "100" });
+  const { config, cache } = await context(t, { VBH_RESERVE_MS: "100" });
   let aborted = 0;
   const client = {
     structured: ({ signal }) => new Promise((resolve, reject) => {
@@ -91,7 +91,7 @@ test("a deadline cancels an in-flight model call and the run still returns", asy
 });
 
 test("work that cannot finish inside the timer is never started", async (t) => {
-  const { config, cache } = await context(t, { CHEETCODE_RESERVE_MS: "100" });
+  const { config, cache } = await context(t, { VBH_RESERVE_MS: "100" });
   let calls = 0;
   const client = {
     structured: async () => {
@@ -116,7 +116,7 @@ test("work that cannot finish inside the timer is never started", async (t) => {
 });
 
 test("one oversized batch that fails is retried as halves", async (t) => {
-  const { config, cache } = await context(t, { CHEETCODE_BATCH_SIZE: "8", CHEETCODE_CONCURRENCY: "1" });
+  const { config, cache } = await context(t, { VBH_BATCH_SIZE: "8", VBH_CONCURRENCY: "1" });
   const batches = [];
   const client = {
     structured: async (request) => {

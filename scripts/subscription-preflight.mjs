@@ -9,13 +9,13 @@ import { SolverCache } from "../src/runtime/cache.mjs";
 import { solveManifest } from "../src/solver/orchestrator.mjs";
 
 const projectRoot = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
-const temporary = await mkdtemp(path.join(os.tmpdir(), "cheetcode-subscription-preflight-"));
+const temporary = await mkdtemp(path.join(os.tmpdir(), "harness-subscription-preflight-"));
 
 try {
   const baseConfig = loadConfig({
     ...process.env,
-    CHEETCODE_CACHE_DIR: temporary,
-    CHEETCODE_MODEL_PROVIDER: "codex",
+    VBH_CACHE_DIR: temporary,
+    VBH_MODEL_PROVIDER: "codex",
   }, projectRoot);
   const runtime = createModelRuntime(baseConfig, "codex");
   const manifest = await loadManifest(

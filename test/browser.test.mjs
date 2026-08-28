@@ -13,7 +13,7 @@ test("browser CLI parses an explicitly scoped run", () => {
     parseArguments([
       "run",
       "--session",
-      "cheetcode",
+      "harness",
       "--allow-origin",
       "https://ctf.firecrawl.dev",
       "--deadline-ms",
@@ -23,7 +23,7 @@ test("browser CLI parses an explicitly scoped run", () => {
       command: "run",
       positional: [],
       options: {
-        session: "cheetcode",
+        session: "harness",
         "allow-origin": "https://ctf.firecrawl.dev",
         "deadline-ms": "60000",
       },

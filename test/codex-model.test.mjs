@@ -36,7 +36,7 @@ test("Codex prompt treats task input as data and requests no tool use", () => {
 });
 
 test("CodexExecModelClient reads validated output and removes temporary files", async () => {
-  const temporaryRoot = await mkdtemp(path.join(os.tmpdir(), "cheetcode-codex-test-"));
+  const temporaryRoot = await mkdtemp(path.join(os.tmpdir(), "harness-codex-test-"));
   let observed;
   try {
     const client = new CodexExecModelClient({

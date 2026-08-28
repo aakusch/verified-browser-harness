@@ -143,11 +143,11 @@ class PartialClient {
   }
 }
 
-async function harness(t, { CHEETCODE_BRIDGE_POLL_MS = "5", ...env } = {}) {
-  const temporary = await mkdtemp(path.join(os.tmpdir(), "cheetcode-bridge-test-"));
+async function harness(t, { VBH_BRIDGE_POLL_MS = "5", ...env } = {}) {
+  const temporary = await mkdtemp(path.join(os.tmpdir(), "harness-bridge-test-"));
   t.after(() => rm(temporary, { recursive: true, force: true }));
   return {
-    config: loadConfig({ CHEETCODE_CACHE_DIR: temporary, CHEETCODE_BRIDGE_POLL_MS, ...env }, root),
+    config: loadConfig({ VBH_CACHE_DIR: temporary, VBH_BRIDGE_POLL_MS, ...env }, root),
     cache: new SolverCache(path.join(temporary, "solutions")),
     verificationStatePath: path.join(temporary, "verification.json"),
   };
@@ -223,7 +223,7 @@ test("a lane that times out keeps the answers it already produced", async (t) =>
 
 test("checks that never settle end the run without a submission token", async (t) => {
   const { config, cache, verificationStatePath } = await harness(t, {
-    CHEETCODE_BRIDGE_CHECK_TIMEOUT_MS: "60",
+    VBH_BRIDGE_CHECK_TIMEOUT_MS: "60",
   });
   const browser = new FakeBrowser({ tasks: makeTasks(2), settle: false });
   const result = await runBrowserBridge({

@@ -10,7 +10,7 @@ test("fingerprint is stable across object key order", () => {
 });
 
 test("SolverCache writes private JSON and reads it back", async (t) => {
-  const root = await mkdtemp(path.join(os.tmpdir(), "cheetcode-cache-"));
+  const root = await mkdtemp(path.join(os.tmpdir(), "harness-cache-"));
   t.after(() => rm(root, { recursive: true, force: true }));
   const cache = new SolverCache(root);
   const file = await cache.put("test", { id: "one" }, { answer: 42 });

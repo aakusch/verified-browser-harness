@@ -19,11 +19,11 @@ if (!process.env.OPENAI_API_KEY) {
   process.exit(0);
 }
 
-const temporary = await mkdtemp(path.join(os.tmpdir(), "cheetcode-model-preflight-"));
+const temporary = await mkdtemp(path.join(os.tmpdir(), "harness-model-preflight-"));
 try {
   const config = loadConfig({
     ...process.env,
-    CHEETCODE_CACHE_DIR: temporary,
+    VBH_CACHE_DIR: temporary,
   }, projectRoot);
   const manifest = await loadManifest(
     path.join(projectRoot, "fixtures", "browser-level1.json"),

@@ -37,7 +37,7 @@ test("OpenAIModelClient sends a non-stored strict structured request", async () 
   assert.deepEqual(response.value, { ok: true });
   assert.equal(requestBody.store, false);
   assert.equal(requestBody.text.format.strict, true);
-  assert.equal(requestBody.safety_identifier, "cheetcode-v3-local-harness");
+  assert.equal(requestBody.safety_identifier, "harness-v3-local-harness");
   assert.equal(requestBody.service_tier, "auto");
 });
 

@@ -13,10 +13,10 @@ import { solveManifest } from "../src/solver/orchestrator.mjs";
 const root = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
 
 test("solveManifest completes the JavaScript fixture and reuses cache", async (t) => {
-  const temporary = await mkdtemp(path.join(os.tmpdir(), "cheetcode-orchestrator-"));
+  const temporary = await mkdtemp(path.join(os.tmpdir(), "harness-orchestrator-"));
   t.after(() => rm(temporary, { recursive: true, force: true }));
   const manifest = await loadManifest(path.join(root, "fixtures", "javascript.json"));
-  const config = loadConfig({ CHEETCODE_CACHE_DIR: temporary }, root);
+  const config = loadConfig({ VBH_CACHE_DIR: temporary }, root);
   const cache = new SolverCache(config.cacheDir);
   const firstClient = new MockModelClient();
   const first = await solveManifest({ manifest, config, cache, client: firstClient });

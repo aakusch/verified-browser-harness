@@ -45,7 +45,7 @@ function reasoningEffort(value, fallback, name) {
 function serviceTier(value) {
   const resolved = value || "auto";
   if (!["auto", "default", "flex", "fast", "priority", "ultrafast"].includes(resolved)) {
-    throw new HarnessError("CHEETCODE_SERVICE_TIER is not supported", {
+    throw new HarnessError("VBH_SERVICE_TIER is not supported", {
       code: "INVALID_CONFIG",
     });
   }
@@ -58,7 +58,7 @@ function modelProvider(value) {
   const resolved = value || "openai";
   if (!MODEL_PROVIDERS.includes(resolved)) {
     throw new HarnessError(
-      `CHEETCODE_MODEL_PROVIDER is not supported. Supported: ${MODEL_PROVIDERS.join(", ")}`,
+      `VBH_MODEL_PROVIDER is not supported. Supported: ${MODEL_PROVIDERS.join(", ")}`,
       { code: "INVALID_CONFIG" },
     );
   }
@@ -70,86 +70,86 @@ export function loadConfig(env = process.env, cwd = process.cwd()) {
     apiKey: env.OPENAI_API_KEY || "",
     baseUrl: (env.OPENAI_BASE_URL || "https://api.openai.com/v1").replace(/\/$/, ""),
     safetyIdentifier:
-      env.CHEETCODE_SAFETY_IDENTIFIER || "cheetcode-v3-local-harness",
-    serviceTier: serviceTier(env.CHEETCODE_SERVICE_TIER),
-    modelProvider: modelProvider(env.CHEETCODE_MODEL_PROVIDER),
-    codexExecutable: env.CHEETCODE_CODEX_EXECUTABLE || "codex",
-    claudeExecutable: env.CHEETCODE_CLAUDE_EXECUTABLE || "claude",
-    cursorExecutable: env.CHEETCODE_CURSOR_EXECUTABLE || "cursor-agent",
-    fastModel: env.CHEETCODE_FAST_MODEL || DEFAULTS.fastModel,
-    strongModel: env.CHEETCODE_STRONG_MODEL || DEFAULTS.strongModel,
-    systemsModel: env.CHEETCODE_SYSTEMS_MODEL || DEFAULTS.systemsModel,
+      env.VBH_SAFETY_IDENTIFIER || "harness-v3-local-harness",
+    serviceTier: serviceTier(env.VBH_SERVICE_TIER),
+    modelProvider: modelProvider(env.VBH_MODEL_PROVIDER),
+    codexExecutable: env.VBH_CODEX_EXECUTABLE || "codex",
+    claudeExecutable: env.VBH_CLAUDE_EXECUTABLE || "claude",
+    cursorExecutable: env.VBH_CURSOR_EXECUTABLE || "cursor-agent",
+    fastModel: env.VBH_FAST_MODEL || DEFAULTS.fastModel,
+    strongModel: env.VBH_STRONG_MODEL || DEFAULTS.strongModel,
+    systemsModel: env.VBH_SYSTEMS_MODEL || DEFAULTS.systemsModel,
     fastReasoning: reasoningEffort(
-      env.CHEETCODE_FAST_REASONING,
+      env.VBH_FAST_REASONING,
       DEFAULTS.fastReasoning,
-      "CHEETCODE_FAST_REASONING",
+      "VBH_FAST_REASONING",
     ),
     strongReasoning: reasoningEffort(
-      env.CHEETCODE_STRONG_REASONING,
+      env.VBH_STRONG_REASONING,
       DEFAULTS.strongReasoning,
-      "CHEETCODE_STRONG_REASONING",
+      "VBH_STRONG_REASONING",
     ),
     systemsReasoning: reasoningEffort(
-      env.CHEETCODE_SYSTEMS_REASONING,
+      env.VBH_SYSTEMS_REASONING,
       DEFAULTS.systemsReasoning,
-      "CHEETCODE_SYSTEMS_REASONING",
+      "VBH_SYSTEMS_REASONING",
     ),
     concurrency: positiveInteger(
-      env.CHEETCODE_CONCURRENCY,
+      env.VBH_CONCURRENCY,
       DEFAULTS.concurrency,
-      "CHEETCODE_CONCURRENCY",
+      "VBH_CONCURRENCY",
     ),
     batchSize: positiveInteger(
-      env.CHEETCODE_BATCH_SIZE,
+      env.VBH_BATCH_SIZE,
       DEFAULTS.batchSize,
-      "CHEETCODE_BATCH_SIZE",
+      "VBH_BATCH_SIZE",
     ),
     reserveMs: positiveInteger(
-      env.CHEETCODE_RESERVE_MS,
+      env.VBH_RESERVE_MS,
       DEFAULTS.reserveMs,
-      "CHEETCODE_RESERVE_MS",
+      "VBH_RESERVE_MS",
     ),
     requestTimeoutMs: positiveInteger(
-      env.CHEETCODE_REQUEST_TIMEOUT_MS,
+      env.VBH_REQUEST_TIMEOUT_MS,
       DEFAULTS.requestTimeoutMs,
-      "CHEETCODE_REQUEST_TIMEOUT_MS",
+      "VBH_REQUEST_TIMEOUT_MS",
     ),
     validationTimeoutMs: positiveInteger(
-      env.CHEETCODE_VALIDATION_TIMEOUT_MS,
+      env.VBH_VALIDATION_TIMEOUT_MS,
       DEFAULTS.validationTimeoutMs,
-      "CHEETCODE_VALIDATION_TIMEOUT_MS",
+      "VBH_VALIDATION_TIMEOUT_MS",
     ),
     maxOutputTokens: positiveInteger(
-      env.CHEETCODE_MAX_OUTPUT_TOKENS,
+      env.VBH_MAX_OUTPUT_TOKENS,
       DEFAULTS.maxOutputTokens,
-      "CHEETCODE_MAX_OUTPUT_TOKENS",
+      "VBH_MAX_OUTPUT_TOKENS",
     ),
     codexBatchSize: positiveInteger(
-      env.CHEETCODE_CODEX_BATCH_SIZE,
+      env.VBH_CODEX_BATCH_SIZE,
       DEFAULTS.codexBatchSize,
-      "CHEETCODE_CODEX_BATCH_SIZE",
+      "VBH_CODEX_BATCH_SIZE",
     ),
     bridgeReserveMs: positiveInteger(
-      env.CHEETCODE_BRIDGE_RESERVE_MS,
+      env.VBH_BRIDGE_RESERVE_MS,
       DEFAULTS.bridgeReserveMs,
-      "CHEETCODE_BRIDGE_RESERVE_MS",
+      "VBH_BRIDGE_RESERVE_MS",
     ),
     bridgeCheckTimeoutMs: positiveInteger(
-      env.CHEETCODE_BRIDGE_CHECK_TIMEOUT_MS,
+      env.VBH_BRIDGE_CHECK_TIMEOUT_MS,
       DEFAULTS.bridgeCheckTimeoutMs,
-      "CHEETCODE_BRIDGE_CHECK_TIMEOUT_MS",
+      "VBH_BRIDGE_CHECK_TIMEOUT_MS",
     ),
     bridgePollMs: positiveInteger(
-      env.CHEETCODE_BRIDGE_POLL_MS,
+      env.VBH_BRIDGE_POLL_MS,
       DEFAULTS.bridgePollMs,
-      "CHEETCODE_BRIDGE_POLL_MS",
+      "VBH_BRIDGE_POLL_MS",
     ),
     bridgeVerificationTtlMs: positiveInteger(
-      env.CHEETCODE_BRIDGE_VERIFICATION_TTL_MS,
+      env.VBH_BRIDGE_VERIFICATION_TTL_MS,
       DEFAULTS.bridgeVerificationTtlMs,
-      "CHEETCODE_BRIDGE_VERIFICATION_TTL_MS",
+      "VBH_BRIDGE_VERIFICATION_TTL_MS",
     ),
-    cacheDir: path.resolve(cwd, env.CHEETCODE_CACHE_DIR || ".cache"),
+    cacheDir: path.resolve(cwd, env.VBH_CACHE_DIR || ".cache"),
   });
 }
 

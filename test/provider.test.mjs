@@ -6,8 +6,8 @@ import { createModelRuntime, resolveModelProvider } from "../src/model/provider.
 
 test("Codex provider uses one subscription-oriented 25-task batch", () => {
   const runtime = createModelRuntime(loadConfig({
-    CHEETCODE_MODEL_PROVIDER: "codex",
-  }, "/tmp/cheetcode-provider-test"));
+    VBH_MODEL_PROVIDER: "codex",
+  }, "/tmp/harness-provider-test"));
   assert.equal(runtime.provider, "codex");
   assert.ok(runtime.client instanceof CodexExecModelClient);
   assert.equal(runtime.config.batchSize, 25);
