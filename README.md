@@ -138,6 +138,13 @@ midway through a fill or a check. Logs contain task counts and IDs, never the AP
 Configuration is via `VBH_*` environment variables — models, provider, concurrency, batch
 size, reserves, and timeouts. See `.env.example` for the full list.
 
+## Design notes
+
+The control plane, its state machine, and the reasoning behind the deterministic runner
+are documented in [`docs/ORCHESTRATION.md`](docs/ORCHESTRATION.md). Operating rules —
+safety boundary, provider discipline, and the verification workflow — are in
+[`AGENTS.md`](AGENTS.md).
+
 ## Scope and limitations
 
 - The harness only knows what is in the manifest, the local source index, or the visible
